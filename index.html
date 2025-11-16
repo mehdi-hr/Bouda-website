@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+  <!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '726245523840327');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=726245523840327&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>كتاب البكالوريا 2017-2023 - 1500 دج فقط - Bouda Copy Express</title>
@@ -31,7 +48,7 @@
       color: white; text-align: center; padding: 20px; border-radius: 0 0 16px 16px;
     }
     .header h1 { font-size: 1.5rem; margin-bottom: 8px; }
-    .product-card { background: white; border-radius: 16px; box-shadow: var(--shadow-card, 0 4px 20px rgba(59,130,246,0.1)); padding: 20px; margin: 20px 0; text-align: center; }
+    .product-card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(59,130,246,0.1); padding: 20px; margin: 20px 0; text-align: center; }
     .product-img { max-width: 280px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 16px; }
     .price { font-size: 1.8rem; font-weight: 800; color: var(--secondary); margin: 12px 0; }
     .badge { background: rgba(16,185,129,0.15); color: var(--secondary); padding: 4px 12px; border-radius: 999px; font-weight: 600; margin-bottom: 12px; display: inline-block; }
@@ -42,6 +59,8 @@
       transition: border 0.2s;
     }
     input:focus, select:focus { border-color: var(--primary); outline: none; }
+    .error { border-color: #ef4444 !important; }
+    .error-msg { color: #ef4444; font-size: 0.8rem; margin-top: 4px; }
     .total-price {
       background: #ecfdf5; padding: 16px; border-radius: 12px; font-weight: 700; text-align: center; margin: 20px 0;
       border: 2px solid #a7f3d0; font-size: 1.3rem; color: #166534;
@@ -52,13 +71,14 @@
       box-shadow: 0 6px 20px rgba(59,130,246,0.3); transition: 0.3s;
     }
     button:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(59,130,246,0.4); }
+    button:disabled { opacity: 0.7; cursor: not-allowed; }
     .footer { background: var(--foreground); color: white; padding: 32px 0; margin-top: 64px; text-align: center; }
     .footer a {
       background: var(--secondary); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none;
       font-weight: 700; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s;
     }
     .footer a:hover { background: #0d9f70; }
-    #subCategory { display: none; }
+    #subCategory, #bureauGroup { display: none; }
     @keyframes pulse-soft { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .9; transform: scale(1.02); } }
     .animate-pulse-soft { animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   </style>
@@ -120,7 +140,7 @@
 
       <div class="form-group">
         <label for="wilaya">الولاية *</label>
-        <select id="wilaya" name="الولاية" onchange="updatePrice()" required>
+        <select id="wilaya" name="الولاية" onchange="updateBureaux()" required>
           <option value="">اختر الولاية</option>
           <option value="أدرار">أدرار</option>
           <option value="الشلف">الشلف</option>
@@ -143,7 +163,7 @@
           <option value="سطيف">سطيف</option>
           <option value="سعيدة">سعيدة</option>
           <option value="سكيكدة">سكيكدة</option>
-          <option value="سيدي بل3باس">سيدي بلعباس</option>
+          <option value="سيدي بلعباس">سيدي بلعباس</option>
           <option value="عنابة">عنابة</option>
           <option value="قالمة">قالمة</option>
           <option value="قسنطينة">قسنطينة</option>
@@ -178,15 +198,24 @@
       </div>
 
       <div class="form-group">
-        <label for="commune">البلدية (اختياري)</label>
-        <input id="commune" name="البلدية" type="text" placeholder="أدخل اسم البلدية">
+        <label for="commune">البلدية *</label>
+        <input id="commune" name="البلدية" type="text" required placeholder="أدخل اسم البلدية" onblur="validateBaladia()">
+        <div id="baladiaError" class="error-msg" style="display:none;">البلدية مطلوبة</div>
       </div>
 
       <div class="form-group">
         <label for="deliveryType">نوع التوصيل *</label>
-        <select id="deliveryType" name="نوع التوصيل" onchange="updatePrice()" required>
+        <select id="deliveryType" name="نوع التوصيل" onchange="updateBureaux()" required>
+          <option value="">اختر نوع التوصيل</option>
           <option value="home">إلى المنزل</option>
           <option value="office">إلى مكتب ZR Express</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="bureauGroup">
+        <label for="bureau">مكتب ZR Express *</label>
+        <select id="bureau" name="مكتب ZR Express" required>
+          <option value="">اختر المكتب</option>
         </select>
       </div>
 
@@ -205,58 +234,58 @@
 
   <script>
     const DELIVERY_PRICES = {
-      "أدرار": { home: 1400, office: 970 },
-      "الشلف": { home: 850, office: 520 },
-      "الأغواط": { home: 950, office: 620 },
-      "أم البواقي": { home: 850, office: 520 },
-      "باتنة": { home: 900, office: 520 },
-      "بجاية": { home: 800, office: 520 },
-      "بسكرة": { home: 950, office: 620 },
-      "بشار": { home: 1100, office: 720 },
-      "البليدة": { home: 600, office: 470 },
-      "البويرة": { home: 700, office: 520 },
-      "تمنراست": { home: 1600, office: 1120 },
-      "تبسة": { home: 900, office: 570 },
-      "تلمسان": { home: 900, office: 570 },
-      "تيارت": { home: 850, office: 520 },
-      "تيزي وزو": { home: 750, office: 520 },
-      "الجزائر": { home: 500, office: 370 },
-      "الجلفة": { home: 950, office: 570 },
-      "جيجل": { home: 900, office: 520 },
-      "سطيف": { home: 800, office: 520 },
-      "سعيدة": { home: 900, office: 570 },
-      "سكيكدة": { home: 900, office: 520 },
-      "سيدي بلعباس": { home: 900, office: 520 },
-      "عنابة": { home: 850, office: 520 },
-      "قالمة": { home: 900, office: 520 },
-      "قسنطينة": { home: 800, office: 520 },
-      "المدية": { home: 800, office: 520 },
-      "مستغانم": { home: 900, office: 520 },
-      "المسيلة": { home: 850, office: 570 },
-      "معسكر": { home: 900, office: 520 },
-      "ورقلة": { home: 950, office: 670 },
-      "وهران": { home: 800, office: 520 },
-      "البيض": { home: 1100, office: 670 },
-      "برج بوعريريج": { home: 800, office: 520 },
-      "بومرداس": { home: 700, office: 520 },
-      "الطارف": { home: 850, office: 520 },
-      "تيسمسيلت": { home: 900, office: 520 },
-      "الوادي": { home: 950, office: 670 },
-      "خنشلة": { home: 900, office: 520 },
-      "سوق أهراس": { home: 900, office: 520 },
-      "تيبازة": { home: 700, office: 520 },
-      "ميلة": { home: 900, office: 520 },
-      "عين الدفلى": { home: 900, office: 520 },
-      "النعامة": { home: 1100, office: 670 },
-      "عين تموشنت": { home: 900, office: 520 },
-      "غرداية": { home: 950, office: 620 },
-      "غليزان": { home: 900, office: 520 },
-      "تيميمون": { home: 1400, office: 970 },
-      "أولاد جلال": { home: 950, office: 620 },
-      "بني عباس": { home: 1100, office: 970 },
-      "توقرت": { home: 950, office: 670 },
-      "المغير": { home: 950, office: 670 },
-      "المنيعة": { home: 1000, office: 750 }
+      "أدرار": { home: 1400, office: 1000 },
+      "الشلف": { home: 850, office: 500 },
+      "الأغواط": { home: 950, office: 600 },
+      "أم البواقي": { home: 850, office: 500 },
+      "باتنة": { home: 900, office: 500 },
+      "بجاية": { home: 800, office: 500 },
+      "بسكرة": { home: 950, office: 600 },
+      "بشار": { home: 1100, office: 700 },
+      "البليدة": { home: 600, office: 500 },
+      "البويرة": { home: 700, office: 500 },
+      "تمنراست": { home: 1600, office: 1100 },
+      "تبسة": { home: 900, office: 600 },
+      "تلمسان": { home: 900, office: 600 },
+      "تيارت": { home: 850, office: 500 },
+      "تيزي وزو": { home: 750, office: 500 },
+      "الجزائر": { home: 500, office: 400 },
+      "الجلفة": { home: 950, office: 600 },
+      "جيجل": { home: 900, office: 500 },
+      "سطيف": { home: 800, office: 500 },
+      "سعيدة": { home: 900, office: 600 },
+      "سكيكدة": { home: 900, office: 500 },
+      "سيدي بلعباس": { home: 900, office: 500 },
+      "عنابة": { home: 850, office: 500 },
+      "قالمة": { home: 900, office: 500 },
+      "قسنطينة": { home: 800, office: 500 },
+      "المدية": { home: 800, office: 500 },
+      "مستغانم": { home: 900, office: 500 },
+      "المسيلة": { home: 850, office: 600 },
+      "معسكر": { home: 900, office: 500 },
+      "ورقلة": { home: 950, office: 700 },
+      "وهران": { home: 800, office: 500 },
+      "البيض": { home: 1100, office: 700 },
+      "برج بوعريريج": { home: 800, office: 500 },
+      "بومرداس": { home: 700, office: 500 },
+      "الطارف": { home: 850, office: 500 },
+      "تيسمسيلت": { home: 900, office: 500 },
+      "الوادي": { home: 950, office: 700 },
+      "خنشلة": { home: 900, office: 500 },
+      "سوق أهراس": { home: 900, office: 500 },
+      "تيبازة": { home: 700, office: 500 },
+      "ميلة": { home: 900, office: 500 },
+      "عين الدفلى": { home: 900, office: 500 },
+      "النعامة": { home: 1100, office: 700 },
+      "عين تموشنت": { home: 900, office: 500 },
+      "غرداية": { home: 950, office: 600 },
+      "غليزان": { home: 900, office: 500 },
+      "تيميمون": { home: 1400, office: 1000 },
+      "أولاد جلال": { home: 950, office: 600 },
+      "بني عباس": { home: 1100, office: 1000 },
+      "توقرت": { home: 950, office: 700 },
+      "المغير": { home: 950, office: 700 },
+      "المنيعة": { home: 1000, office: 800 }
     };
 
     const SPECIALIZATIONS = {
@@ -273,6 +302,197 @@
         subcategories: ["إسبانية", "ألمانية", "إيطالية"] 
       }
     };
+
+    const ZR_BUREAUX = {
+  "أدرار": [
+    "أدرار"
+  ],
+  "الشلف": [
+    "الشلف",
+    "تنس"
+  ],
+  "الأغواط": [
+    "الأغواط"
+  ],
+  "أم البواقي": [
+    "أم البواقي - عين البيضاء",
+    "أم البواقي - المدينة موزع"
+  ],
+  "باتنة": [
+    "باتنة"
+  ],
+  "بجاية": [
+    "بجاية",
+    "أقبو",
+    "بجاية رملة"
+  ],
+  "بسكرة": [
+    "بسكرة"
+  ],
+  "بشار": [
+    "بشار"
+  ],
+  "البليدة": [
+    "البليدة",
+    "البليدة بوقرة",
+    "البليدة موزاية"
+  ],
+  "البويرة": [
+    "البويرة"
+  ],
+  "تمنراست": [
+    "تمنراست"
+  ],
+  "تبسة": [
+    "تبسة"
+  ],
+  "تلمسان": [
+    "تلمسان"
+  ],
+  "تيارت": [
+    "تيارت"
+  ],
+  "تيزي وزو": [
+    "تيزي وزو"
+  ],
+  "الجزائر": [
+    "الجزائر - بئر خادم",
+    "الجزائر - ليدو",
+    "الجزائر - أولاد فايت",
+    "محور الرغاية",
+    "الجزائر - بئر توتة",
+    "الجزائر - الجمهورية",
+    "الجزائر - براقي"
+  ],
+  "الجلفة": [
+    "الجلفة"
+  ],
+  "جيجل": [
+    "جيجل",
+    "جيجل - الطاهير"
+  ],
+  "سطيف": [
+    "سطيف",
+    "العلمة"
+  ],
+  "سعيدة": [
+    "سعيدة"
+  ],
+  "سكيكدة": [
+    "سكيكدة"
+  ],
+  "سيدي بلعباس": [
+    "سيدي بلعباس"
+  ],
+  "عنابة": [
+    "عنابة",
+    "عنابة - البوني",
+    "عنابة - البوني الفرز"
+  ],
+  "قالمة": [
+    "قالمة"
+  ],
+  "قسنطينة": [
+    "قسنطينة - زواغي",
+    "قسنطينة - المدينة الجديدة",
+    "قسنطينة - بلفو"
+  ],
+  "المدية": [
+    "المدية"
+  ],
+  "مستغانم": [
+    "مستغانم"
+  ],
+  "المسيلة": [
+    "المسيلة",
+    "بوسعادة"
+  ],
+  "معسكر": [
+    "معسكر"
+  ],
+  "ورقلة": [
+    "ورقلة",
+    "حاسي مسعود"
+  ],
+  "وهران": [
+    "وهران - المرشد",
+    "وهران - السانيا",
+    "وهران - ميلينيوم",
+    "وهران - مارافال"
+  ],
+  "البيض": [
+    "البيض"
+  ],
+  "برج بوعريريج": [
+    "برج بوعريريج"
+  ],
+  "بومرداس": [
+    "بومرداس",
+    "برج منايل"
+  ],
+  "الطارف": [
+    "الطارف"
+  ],
+  "تيسمسيلت": [
+    "تيسمسيلت"
+  ],
+  "الوادي": [
+    "الوادي"
+  ],
+  "خنشلة": [
+    "خنشلة"
+  ],
+  "سوق أهراس": [
+    "سوق أهراس"
+  ],
+  "تيبازة": [
+    "تيبازة",
+    "تيبازة - قليعة"
+  ],
+  "ميلة": [
+    "ميلة"
+  ],
+  "عين الدفلى": [
+    "عين الدفلى"
+  ],
+  "النعامة": [
+    "النعامة"
+  ],
+  "عين تموشنت": [
+    "عين تموشنت"
+  ],
+  "غرداية": [
+    "غرداية"
+  ],
+  "غليزان": [
+    "غليزان"
+  ],
+  "تيميمون": [
+    "تيميمون"
+  ],
+  "أولاد جلال": [
+    "أولاد جلال"
+  ],
+  "بني عباس": [
+    "بني عباس",
+    "بني عباس - مدينة المستقبل"
+  ],
+  "عين صالح": [
+    "عين صالح"
+  ],
+  "عين قزام": [
+    "عين قزام"
+  ],
+  "توقرت": [
+    "توقرت"
+  ],
+  "المغير": [
+    "المغير"
+  ],
+  "المنيعة": [
+    "المنيعة"
+  ]
+};
 
     function updateSubCategory() {
       const filiere = document.getElementById('filiere').value;
@@ -291,38 +511,94 @@
       updatePrice();
     }
 
+    function updateBureaux() {
+  const wilaya = document.getElementById('wilaya').value;
+  const deliveryType = document.getElementById('deliveryType').value;
+  const bureauGroup = document.getElementById('bureauGroup');
+  const bureauSelect = document.getElementById('bureau');
+
+  if (deliveryType === 'office' && wilaya) {
+    bureauGroup.style.display = 'block';
+    bureauSelect.innerHTML = '<option value="">اختر المكتب</option>';
+    const bureaux = ZR_BUREAUX[wilaya] || ['مكتب ZR Express الرئيسي في ' + wilaya];
+    bureaux.forEach(bureau => {
+      bureauSelect.innerHTML += `<option value="${bureau}">${bureau}</option>`;
+    });
+    bureauSelect.setAttribute('required', 'required');
+  } else {
+    bureauGroup.style.display = 'none';
+    bureauSelect.value = '';
+    bureauSelect.removeAttribute('required'); // Critical fix
+  }
+  updatePrice();
+}
+
+    function validateBaladia() {
+      const baladia = document.getElementById('commune').value.trim();
+      const errorDiv = document.getElementById('baladiaError');
+      const input = document.getElementById('commune');
+      if (baladia === '') {
+        input.classList.add('error');
+        errorDiv.style.display = 'block';
+      } else {
+        input.classList.remove('error');
+        errorDiv.style.display = 'none';
+      }
+    }
+
     function updatePrice() {
       const wilaya = document.getElementById('wilaya').value;
       const deliveryType = document.getElementById('deliveryType').value;
       let deliveryCost = 0;
-      if (wilaya && DELIVERY_PRICES[wilaya]) {
+      if (wilaya && deliveryType && DELIVERY_PRICES[wilaya]) {
         deliveryCost = deliveryType === 'home' ? DELIVERY_PRICES[wilaya].home : DELIVERY_PRICES[wilaya].office;
       }
       document.getElementById('totalPriceValue').innerText = 1500 + deliveryCost;
     }
 
     // AJAX Submit
-    document.querySelector('form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const button = this.querySelector('button[type="submit"]');
-      const originalText = button.innerText;
-      button.disabled = true;
-      button.innerText = 'جاري الإرسال...';
+document.querySelector('form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const baladia = document.getElementById('commune').value.trim();
+  if (baladia === '') {
+    alert('البلدية مطلوبة');
+    return;
+  }
+  const button = this.querySelector('button[type="submit"]');
+  const originalText = button.innerText;
+  button.disabled = true;
+  button.innerText = 'جاري الإرسال...';
 
-      fetch('/', {
-        method: 'POST',
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(new FormData(this)).toString()
-      })
-      .then(() => {
-        this.innerHTML = '<div style="background:#ecfdf5;color:#166534;padding:20px;border-radius:12px;text-align:center;font-size:1.2rem;"><h3>تم استلام طلبك بنجاح!</h3><p>سنتصل بك خلال 24 ساعة.</p></div>';
-      })
-      .catch(() => alert('خطأ في الإرسال'))
-      .finally(() => {
-        button.disabled = false;
-        button.innerText = originalText;
-      });
-    });
+  const formData = new FormData(this);
+  const encoded = new URLSearchParams(formData).toString();
+
+  fetch('/', {
+    method: 'POST',
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: encoded
+  })
+  .then(response => {
+    if (response.ok) {
+      fbq('track', 'Lead'); // Track conversion
+      window.location.href = '/merci.html';
+    } else {
+      throw new Error('Erreur Netlify: ' + response.status);
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert('خطأ في الإرسال: ' + err.message);
+  })
+  .finally(() => {
+    button.disabled = false;
+    button.innerText = originalText;
+  });
+});
   </script>
 </body>
 </html>
+
+
+
+
+
