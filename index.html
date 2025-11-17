@@ -125,6 +125,7 @@ src="https://www.facebook.com/tr?id=726245523840327&ev=PageView&noscript=1"
           <option value="">اختر نوع المواد</option>
           <option value="المواد الأساسية">المواد الأساسية</option>
           <option value="المواد الثانوية">المواد الثانوية</option>
+          <option value="الأساسية والثانوية">الأساسية + الثانوية - 3000 دج</option>
         </select>
       </div>
 
@@ -547,14 +548,26 @@ src="https://www.facebook.com/tr?id=726245523840327&ev=PageView&noscript=1"
     }
 
     function updatePrice() {
-      const wilaya = document.getElementById('wilaya').value;
-      const deliveryType = document.getElementById('deliveryType').value;
-      let deliveryCost = 0;
-      if (wilaya && deliveryType && DELIVERY_PRICES[wilaya]) {
-        deliveryCost = deliveryType === 'home' ? DELIVERY_PRICES[wilaya].home : DELIVERY_PRICES[wilaya].office;
-      }
-      document.getElementById('totalPriceValue').innerText = 1500 + deliveryCost;
-    }
+  const material = document.getElementById('materialType').value;
+  const wilaya = document.getElementById('wilaya').value;
+  const deliveryType = document.getElementById('deliveryType').value;
+
+  let basePrice = 1500;
+  let deliveryCost = 0;
+
+  // Si les deux livres sont choisis → prix fixe 3000
+  if (material === "الأساسية والثانوية") {
+    document.getElementById('totalPriceValue').innerText = 3000;
+    return;
+  }
+
+  // Sinon prix normal 1500 + livraison
+  if (wilaya && deliveryType && DELIVERY_PRICES[wilaya]) {
+    deliveryCost = deliveryType === 'home' ? DELIVERY_PRICES[wilaya].home : DELIVERY_PRICES[wilaya].office;
+  }
+
+  document.getElementById('totalPriceValue').innerText = basePrice + deliveryCost;
+}
 
     // AJAX Submit
 document.querySelector('form').addEventListener('submit', function(e) {
