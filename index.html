@@ -120,14 +120,13 @@ src="https://www.facebook.com/tr?id=726245523840327&ev=PageView&noscript=1"
       </div>
 
       <div class="form-group">
-        <label for="materialType">نوع المواد *</label>
-        <select id="materialType" name="نوع المواد" onchange="updatePrice()" required>
-          <option value="">اختر نوع المواد</option>
-          <option value="المواد الأساسية">المواد الأساسية</option>
-          <option value="المواد الثانوية">المواد الثانوية</option>
-          <option value="الأساسية والثانوية">الأساسية + الثانوية - 3000 دج</option>
-        </select>
-      </div>
+  <label for="materialType">نوع المواد *</label>
+  <select id="materialType" name="نوع المواد" onchange="updatePrice()" required>
+    <option value="">اختر نوع المواد</option>
+    <option value="single">كتاب واحد فقط - 1500 دج</option>
+    <option value="both">الكتابين (أساسية + ثانوية) - 3000 دج</option>
+  </select>
+</div>
 
       <div class="form-group">
         <label for="fullName">الاسم الكامل *</label>
@@ -552,21 +551,15 @@ src="https://www.facebook.com/tr?id=726245523840327&ev=PageView&noscript=1"
   const wilaya = document.getElementById('wilaya').value;
   const deliveryType = document.getElementById('deliveryType').value;
 
-  let basePrice = 1500;
+  let basePrice = material === "both" ? 3000 : 1500;
   let deliveryCost = 0;
 
-  // Si les deux livres sont choisis → prix fixe 3000
-  if (material === "الأساسية والثانوية") {
-    document.getElementById('totalPriceValue').innerText = 3000;
-    return;
-  }
-
-  // Sinon prix normal 1500 + livraison
   if (wilaya && deliveryType && DELIVERY_PRICES[wilaya]) {
     deliveryCost = deliveryType === 'home' ? DELIVERY_PRICES[wilaya].home : DELIVERY_PRICES[wilaya].office;
   }
 
-  document.getElementById('totalPriceValue').innerText = basePrice + deliveryCost;
+  const total = basePrice + deliveryCost;
+  document.getElementById('totalPriceValue').innerText = total;
 }
 
     // AJAX Submit
