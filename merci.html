@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Meta Pixel Base -->
   <script>
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -16,16 +18,22 @@
   t.src=v;s=b.getElementsByTagName(e)[0];
   s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '726245523840327');   <!-- 726245523840327 -->
+  fbq('init', '726245523840327');
   fbq('track', 'PageView');
   </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=726245523840327&ev=PageView&noscript=1"/>
+  </noscript>
 
-  <!-- EVENT ACHAT (fixe) — c’est ÇA qui fait compter l’achat dans Ads Manager -->
+  <!-- Purchase SEULEMENT pour vrais soumissions -->
   <script>
-  fbq('track', 'Purchase', {
-    value: 1900,      // valeur fixe, Meta s’en fout tant qu’il y a un Purchase
-    currency: 'DZD'
-  });
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('success') === 'true') {
+    fbq('track', 'Purchase', {
+      value: 1900,
+      currency: 'DZD'
+    });
+  }
   </script>
   <style>
     * {
