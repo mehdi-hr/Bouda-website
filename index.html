@@ -573,7 +573,7 @@ src="https://www.facebook.com/tr?id=726245523840327&ev=PageView&noscript=1"
   document.getElementById('totalPriceValue').innerText = total;
 }
 
-    // AJAX Submit
+  // AJAX Submit
 document.querySelector('form').addEventListener('submit', function(e) {
   e.preventDefault();
   const baladia = document.getElementById('commune').value.trim();
@@ -596,8 +596,8 @@ document.querySelector('form').addEventListener('submit', function(e) {
   })
   .then(response => {
     if (response.ok) {
-      fbq('track', 'Lead'); // Track conversion
-      window.location.href = '/merci.html';
+      fbq('track', 'Lead'); // Track lead
+      window.location.href = '/merci.html?success=true'; // ← Ajoute ?success=true
     } else {
       throw new Error('Erreur Netlify: ' + response.status);
     }
